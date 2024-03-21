@@ -1,6 +1,6 @@
 package hkmu.comps380f.dao;
 
-import hkmu.comps380f.exception.AttachmentNotFound;
+import hkmu.comps380f.exception.CommentNotFound;
 import hkmu.comps380f.exception.BookNotFound;
 import hkmu.comps380f.model.Book;
 import hkmu.comps380f.model.Comment;
@@ -37,22 +37,17 @@ public class BookService {
     }
 
     @Transactional
-    public List<Book> getComment() {
-        return bookRepo.findAll();
-    }
-
-    @Transactional
     public Comment getComment(long bookId, UUID commentId)
-            throws BookNotFound, AttachmentNotFound {
+            throws BookNotFound, CommentNotFound {
         Book book = bookRepo.findById(bookId).orElse(null);
         if (book == null) {
             throw new BookNotFound(bookId);
         }
-        Comment attachment = commentRepo.findById(commentId).orElse(null);
-        if (attachment == null) {
-            throw new AttachmentNotFound(commentId);
+        Comment comment = commentRepo.findById(commentId).orElse(null);
+        if (comment == null) {
+            throw new CommentNotFound(commentId);
         }
-        return attachment;
+        return comment;
     }
 
     @Transactional(rollbackFor = BookNotFound.class)
@@ -64,9 +59,9 @@ public class BookService {
         bookRepo.delete(deletedBook);
     }
 
-    @Transactional(rollbackFor = AttachmentNotFound.class)
+    @Transactional(rollbackFor = CommentNotFound.class)
     public void deleteComment(long bookId, UUID commentId)
-            throws BookNotFound, AttachmentNotFound {
+            throws BookNotFound, CommentNotFound {
         Book book = bookRepo.findById(bookId).orElse(null);
         if (book == null) {
             throw new BookNotFound(bookId);
@@ -78,7 +73,7 @@ public class BookService {
                 return;
             }
         }
-        throw new AttachmentNotFound(commentId);
+        throw new CommentNotFound(commentId);
     }
 
     @Transactional

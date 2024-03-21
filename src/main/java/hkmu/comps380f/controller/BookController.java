@@ -1,7 +1,7 @@
 package hkmu.comps380f.controller;
 
 import hkmu.comps380f.dao.BookService;
-import hkmu.comps380f.exception.AttachmentNotFound;
+import hkmu.comps380f.exception.CommentNotFound;
 import hkmu.comps380f.exception.BookNotFound;
 import hkmu.comps380f.model.Book;
 import jakarta.annotation.Resource;
@@ -140,9 +140,9 @@ public class BookController {
     }
 
     @GetMapping("/{bookId}/delete/{comment:.+}")
-    public String deleteAttachment(@PathVariable("bookId") long bookId,
-                                   @PathVariable("comment") UUID commentId)
-            throws BookNotFound, AttachmentNotFound {
+    public String deleteComment(@PathVariable("bookId") long bookId,
+                                @PathVariable("comment") UUID commentId)
+            throws BookNotFound, CommentNotFound {
         bookService.deleteComment(bookId, commentId);
         return "redirect:/book/view/" + bookId;
     }
@@ -152,7 +152,7 @@ public class BookController {
         throws BookNotFound {
         return bookService.getBook(bookId).getPhoto();
     }
-    @ExceptionHandler({BookNotFound.class, AttachmentNotFound.class})
+    @ExceptionHandler({BookNotFound.class, CommentNotFound.class})
     public ModelAndView error(Exception e) {
         return new ModelAndView("error", "message", e.getMessage());
     }
