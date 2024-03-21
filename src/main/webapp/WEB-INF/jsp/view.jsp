@@ -1,22 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Customer Support</title>
+    <title>Book</title>
 </head>
 <body>
-<h2>Ticket #${ticketId}: <c:out value="${ticket.subject}"/></h2>
-[<a href="<c:url value="/ticket/delete/${ticket.id}" />">Delete</a>]<br/><br/>
-<i>Customer Name - <c:out value="${ticket.customerName}"/></i><br/><br/>
+<h2>Book: <c:out value="${book.name}"/></h2>
+[<a href="<c:url value="/book/delete/${book.id}" />">Delete</a>]<br/><br/>
+Author - <c:out value="${book.author}"/></i><br/>
+Description - <c:out value="${book.description}"></c:out><br/>
+Available - <c:out value="${book.availability}"></c:out><br/>
+Price - <c:out value="${book.price}"></c:out><br/>
+<c:if test="${not empty book.photo}">
+    <img src="<c:url value="/book/${book.id}/photo"/>" alt="Cover Photo" /><br/><br/>
+</c:if>
+
 <c:out value="${ticket.body}"/><br/><br/>
-<c:if test="${!empty ticket.attachments}">
-    Attachments:
-    <c:forEach items="${ticket.attachments}" var="attachment" varStatus="status">
-        <c:if test="${!status.first}">, </c:if>
-        <a href="<c:url value="/ticket/${ticketId}/attachment/${attachment.id}" />">
-            <c:out value="${attachment.name}"/></a>
-        [<a href="<c:url value="/ticket/${ticketId}/delete/${attachment.id}" />">Delete</a>]
+<c:url var="addComment" value="/book/${book.id}/comment"/>
+<form:form method="POST" modelAttribute="commentForm"
+           action="${addComment}">
+    <form:label path="content">New Comment</form:label><br/>
+    <form:textarea path="content"/><br/><br/>
+    <input type="submit" value="Submit"/>
+</form:form>
+<c:if test="${!empty book.comments}">
+    Comments:
+    <c:forEach items="${book.comments}" var="comment" varStatus="status">
+        <div><c:out value="${comment.content}"/></div>
+        [<a href="<c:url value="/book/${bookId}/delete/${comment.id}" />">Delete</a>]
     </c:forEach><br/><br/>
 </c:if>
-<a href="<c:url value="/ticket" />">Return to list tickets</a>
+<a href="<c:url value="/book" />">Return to books</a>
 </body>
 </html>

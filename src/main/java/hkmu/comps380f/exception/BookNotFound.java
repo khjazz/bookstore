@@ -1,7 +1,7 @@
 package hkmu.comps380f.exception;
 
-public class TicketNotFound extends Exception {
-    public TicketNotFound(long id) {
+public class BookNotFound extends Exception {
+    public BookNotFound(long id) {
         super("Ticket " + id + " does not exist.");
     }
 }
