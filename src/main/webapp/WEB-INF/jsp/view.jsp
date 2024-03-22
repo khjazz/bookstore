@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Book</title>
+    <title>Bookstore</title>
 </head>
 <body>
 <h2>Book:</h2>
