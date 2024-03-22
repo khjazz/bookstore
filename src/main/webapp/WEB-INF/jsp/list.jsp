@@ -17,9 +17,6 @@
                 <c:out value="${entry.name}"/></a>
             (Author: <c:out value="${entry.author}"/>)
             [<a href="<c:url value="/book/delete/${entry.id}" />">Delete</a>]<br />
-            <c:if test="${not empty entry.photo}">
-               <img src="<c:url value="/book/${entry.id}/photo"/>" alt="Cover Photo" /><br/><br/>
-            </c:if>
         </c:forEach>
     </c:otherwise>
 </c:choose>

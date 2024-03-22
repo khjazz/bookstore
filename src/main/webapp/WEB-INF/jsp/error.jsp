@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Customer Support</title>
+    <title>Bookstore</title>
 </head>
 <body>
 <h2>Error page</h2>

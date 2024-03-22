@@ -18,10 +18,12 @@ public class Book {
     private String author;
     private Double price;
     private String description;
-
-    @Lob
-    private byte[] photo;
     private boolean availability;
+
+    @OneToOne(mappedBy = "book", fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    private Photo photo;
+
     @OneToMany(mappedBy = "book", fetch = FetchType.EAGER,
             cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)
@@ -68,11 +70,11 @@ public class Book {
         this.description = description;
     }
 
-    public byte[] getPhoto() {
+    public Photo getPhoto() {
         return photo;
     }
 
-    public void setPhoto(byte[] photo) {
+    public void setPhoto(Photo photo) {
         this.photo = photo;
     }
 

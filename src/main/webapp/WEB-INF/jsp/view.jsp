@@ -4,9 +4,10 @@
     <title>Book</title>
 </head>
 <body>
-<h2>Book: <c:out value="${book.name}"/></h2>
+<h2>Book:</h2>
 [<a href="<c:url value="/book/delete/${book.id}" />">Delete</a>]<br/><br/>
-Author - <c:out value="${book.author}"/></i><br/>
+Title - <c:out value="${book.name}"/><br/>
+Author - <c:out value="${book.author}"/><br/>
 Description - <c:out value="${book.description}"></c:out><br/>
 Available - <c:out value="${book.availability}"></c:out><br/>
 Price - <c:out value="${book.price}"></c:out><br/>
@@ -14,7 +15,6 @@ Price - <c:out value="${book.price}"></c:out><br/>
     <img src="<c:url value="/book/${book.id}/photo"/>" alt="Cover Photo" /><br/><br/>
 </c:if>
 
-<c:out value="${ticket.body}"/><br/><br/>
 <c:url var="addComment" value="/book/${book.id}/comment"/>
 <form:form method="POST" modelAttribute="commentForm"
            action="${addComment}">

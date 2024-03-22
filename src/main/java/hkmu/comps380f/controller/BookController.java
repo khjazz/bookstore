@@ -1,9 +1,12 @@
 package hkmu.comps380f.controller;
 
 import hkmu.comps380f.dao.BookService;
-import hkmu.comps380f.exception.CommentNotFound;
 import hkmu.comps380f.exception.BookNotFound;
+import hkmu.comps380f.exception.CommentNotFound;
+import hkmu.comps380f.exception.PhotoNotFound;
 import hkmu.comps380f.model.Book;
+import hkmu.comps380f.model.Photo;
+import hkmu.comps380f.view.DownloadingView;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -148,10 +151,15 @@ public class BookController {
     }
 
     @GetMapping("/{bookId}/photo")
-    public @ResponseBody byte[] getPhoto(@PathVariable("bookId") long bookId)
-        throws BookNotFound {
-        return bookService.getBook(bookId).getPhoto();
+    public View getPhoto(@PathVariable("bookId") long bookId)
+        throws BookNotFound, PhotoNotFound {
+        Photo photo = bookService.getPhoto(bookId);
+
+        return new DownloadingView(photo.getName(),
+                photo.getMimeContentType(), photo.getContents());
     }
+
+
     @ExceptionHandler({BookNotFound.class, CommentNotFound.class})
     public ModelAndView error(Exception e) {
         return new ModelAndView("error", "message", e.getMessage());
