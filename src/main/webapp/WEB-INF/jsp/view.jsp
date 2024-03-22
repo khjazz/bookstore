@@ -11,9 +11,9 @@ Author - <c:out value="${book.author}"/><br/>
 Description - <c:out value="${book.description}"></c:out><br/>
 Available - <c:out value="${book.availability}"></c:out><br/>
 Price - <c:out value="${book.price}"></c:out><br/>
-<c:if test="${not empty book.photo}">
-    <img src="<c:url value="/book/${book.id}/photo"/>" alt="Cover Photo" /><br/><br/>
-</c:if>
+<%--<c:if test="${not empty book.photo}">--%>
+<img src="<c:url value="/book/${book.id}/photo"/>" alt="Cover Photo" /><br/><br/>
+<%--</c:if>--%>
 
 <c:url var="addComment" value="/book/${book.id}/comment"/>
 <form:form method="POST" modelAttribute="commentForm"
