@@ -109,7 +109,7 @@ public class BookService {
 
     @Transactional
     public void addComment(long bookId, String content)
-        throws BookNotFound {
+            throws BookNotFound {
         Book book = bookRepo.findById(bookId).orElse(null);
         if (book == null) {
             throw new BookNotFound(bookId);
@@ -119,6 +119,32 @@ public class BookService {
         comment.setContent(content);
 
         commentRepo.save(comment);
+    }
+
+    @Transactional(rollbackFor = BookNotFound.class)
+    public void updateBook(long id, String author, String description,
+                           double price, boolean availability, MultipartFile filePart)
+            throws IOException, BookNotFound {
+        Book updatedBook = bookRepo.findById(id).orElse(null);
+        if (updatedBook == null) {
+            throw new BookNotFound(id);
+        }
+        updatedBook.setAuthor(author);
+        updatedBook.setDescription(description);
+        updatedBook.setPrice(price);
+        updatedBook.setAvailability(availability);
+
+        Photo photo = new Photo();
+        photo.setName(filePart.getOriginalFilename());
+        photo.setMimeContentType(filePart.getContentType());
+        photo.setContents(filePart.getBytes());
+
+        if (photo.getName() != null && photo.getName().length() > 0
+                && photo.getContents() != null
+                && photo.getContents().length > 0) {
+            updatedBook.setPhoto(photo);
+        }
+        bookRepo.save(updatedBook);
     }
 
 }
