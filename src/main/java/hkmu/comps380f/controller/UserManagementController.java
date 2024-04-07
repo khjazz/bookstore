@@ -36,6 +36,8 @@ public class UserManagementController {
     public static class Form {
         private String username;
         private String password;
+        private String email;
+        private String delivery;
         private String[] roles;
         // getters and setters for all properties
 
@@ -55,6 +57,22 @@ public class UserManagementController {
             this.password = password;
         }
 
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getDelivery() {
+            return delivery;
+        }
+
+        public void setDelivery(String delivery) {
+            this.delivery = delivery;
+        }
+
         public String[] getRoles() {
             return roles;
         }
@@ -72,7 +90,7 @@ public class UserManagementController {
     @PostMapping("/create")
     public String create(Form form) throws IOException {
         umService.createTicketUser(form.getUsername(),
-                form.getPassword(),form.getRoles());
+                form.getPassword(), form.getEmail(), form.getDelivery(),form.getRoles());
         return "redirect:/user/list";
     }
 

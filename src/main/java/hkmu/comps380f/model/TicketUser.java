@@ -13,13 +13,17 @@ public class TicketUser {
     @Id
     private String username;
     private String password;
+    private String email;
+    private String delivery;
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER,
             cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserRole> roles = new ArrayList<>();
     public TicketUser() {}
-    public TicketUser(String username, String password, String[] roles) {
+    public TicketUser(String username, String password, String email, String delivery, String[] roles) {
         this.username = username;
         this.password = "{noop}" + password;
+        this.email = email;
+        this.delivery = delivery;
         for (String role : roles) {
             this.roles.add(new UserRole(this, role));
         }
@@ -41,6 +45,22 @@ public class TicketUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getDelivery() {
+        return delivery;
+    }
+
+    public void setDelivery(String delivery) {
+        this.delivery = delivery;
     }
 
     public List<UserRole> getRoles() {
