@@ -12,6 +12,22 @@ public class IndexController {
     public String index(HttpServletRequest request) {
 
         Locale currentlocale = request.getLocale();
+        String countryCode = currentlocale.getCountry();
+        String countryName = currentlocale.getDisplayName();
+
+        String langCode = currentlocale.getLanguage();
+        String langName = currentlocale.getDisplayLanguage();
+
+        System.out.println(countryCode + ": " + countryName);
+        System.out.println(langCode + ": " + langName);
+
+        System.out.println("===============");
+        String[] languages = Locale.getISOLanguages();
+
+        for(String language : languages) {
+            Locale locale = new Locale(language);
+            System.out.println(language + ": " + locale.getDisplayLanguage());
+        }
 
         return "redirect:/book/list";
     }
