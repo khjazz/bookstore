@@ -12,7 +12,7 @@ Description - <c:out value="${book.description}"></c:out><br/>
 Available - <c:out value="${book.availability}"></c:out><br/>
 Price - <c:out value="${book.price}"></c:out><br/>
 <%--<c:if test="${not empty book.photo}">--%>
-<img src="<c:url value="/book/${book.id}/photo"/>" alt="Cover Photo" /><br/><br/>
+<img src="<c:url value="/book/${book.id}/photo"/>" alt="Cover Photo" style="width: 250px; height: auto"/><br/><br/>
 <%--</c:if>--%>
 
 <c:url var="addComment" value="/book/${book.id}/comment"/>

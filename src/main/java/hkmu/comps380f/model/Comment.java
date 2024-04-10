@@ -14,10 +14,7 @@ public class Comment {
 
     private String content;
 
-    @Column(name = "book_id", insertable=false, updatable=false)
-    private long bookId;
-
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "book_id")
     private Book book;
 
@@ -36,14 +33,6 @@ public class Comment {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public long getBookId() {
-        return bookId;
-    }
-
-    public void setBookId(long bookId) {
-        this.bookId = bookId;
     }
 
     public Book getBook() {

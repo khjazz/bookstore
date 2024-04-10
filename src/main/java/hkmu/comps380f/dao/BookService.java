@@ -100,6 +100,7 @@ public class BookService {
         if (photo.getName() != null && photo.getName().length() > 0
                 && photo.getContents() != null
                 && photo.getContents().length > 0) {
+            photo.setBook(book);
             book.setPhoto(photo);
         }
 

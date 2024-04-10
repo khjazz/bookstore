@@ -22,6 +22,7 @@ public class Photo {
 
     @Column(name = "book_id", insertable=false, updatable=false)
     private long bookId;
+
     @OneToOne
     @JoinColumn(name = "book_id")
     private Book book;
