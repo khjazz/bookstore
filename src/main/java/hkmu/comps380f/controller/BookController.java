@@ -8,6 +8,8 @@ import hkmu.comps380f.model.Book;
 import hkmu.comps380f.model.Photo;
 import hkmu.comps380f.view.DownloadingView;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +19,9 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
 @RequestMapping("/book")
@@ -159,6 +163,30 @@ public class BookController {
                 photo.getMimeContentType(), photo.getContents());
     }
 
+    private void addToCart(HttpServletRequest request, long bookId)
+            throws IOException {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("cart") == null)
+            session.setAttribute("cart", new ConcurrentHashMap<>());
+        @SuppressWarnings("unchecked")
+        Map<Long, Integer> cart
+                = (Map<Long, Integer>) session.getAttribute("cart");
+        if (!cart.containsKey(bookId))
+            cart.put(bookId, 0);
+        cart.put(bookId, cart.get(bookId) + 1);
+    }
+    @GetMapping("/shop")
+    public String doShop(HttpServletRequest request,
+                         @RequestParam long bookId,
+                         @RequestParam String action)
+            throws IOException {
+        if (action == null)
+            action = "browse";
+        if (action.equals("addToCart")) {
+            this.addToCart(request, bookId);
+        }
+        return "redirect:/book/list";
+    }
 
     @ExceptionHandler({BookNotFound.class, CommentNotFound.class})
     public ModelAndView error(Exception e) {
