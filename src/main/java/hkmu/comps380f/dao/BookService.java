@@ -49,9 +49,7 @@ public class BookService {
             throw new BookNotFound(bookId);
         }
         Photo photo = book.getPhoto();
-        if (photo == null) {
-            throw new PhotoNotFound(book.getName());
-        }
+
         return photo;
     }
 
