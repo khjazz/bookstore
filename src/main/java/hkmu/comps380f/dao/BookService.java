@@ -6,6 +6,7 @@ import hkmu.comps380f.exception.PhotoNotFound;
 import hkmu.comps380f.model.Book;
 import hkmu.comps380f.model.Comment;
 import hkmu.comps380f.model.Photo;
+import hkmu.comps380f.model.TicketUser;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,9 @@ public class BookService {
 
     @Resource
     private PhotoRepository photoRepo;
+
+    @Resource
+    private TicketUserRepository userRepo;
 
     @Transactional
     public List<Book> getBooks() {
@@ -107,8 +111,9 @@ public class BookService {
     }
 
     @Transactional
-    public void addComment(long bookId, String content)
+    public void addComment(String username, long bookId, String content)
             throws BookNotFound {
+        TicketUser user = userRepo.findById(username).orElse(null);
         Book book = bookRepo.findById(bookId).orElse(null);
         if (book == null) {
             throw new BookNotFound(bookId);
@@ -116,6 +121,7 @@ public class BookService {
         Comment comment = new Comment();
         comment.setBook(book);
         comment.setContent(content);
+        comment.setUser(user);
 
         commentRepo.save(comment);
     }

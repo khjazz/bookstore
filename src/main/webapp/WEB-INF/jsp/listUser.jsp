@@ -24,6 +24,7 @@
                 <th>delivery</th>
                 <th>Roles</th>
                 <th>Action</th>
+                <th>Comments</th>
             </tr>
             <c:forEach items="${ticketUsers}" var="user">
                 <tr>
@@ -39,6 +40,9 @@
                     </td>
                     <td>
                         [<a href="<c:url value="/user/delete/${user.username}" />">Delete</a>]
+                    </td>
+                    <td>
+                        [<a href="<c:url value="/user/comment/${user.username}" />">Comments</a>]
                     </td>
                 </tr>
             </c:forEach>
