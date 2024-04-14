@@ -1,34 +1,36 @@
 package hkmu.comps380f.controller;
 
+import hkmu.comps380f.dao.BookService;
+import hkmu.comps380f.dao.CommentService;
 import hkmu.comps380f.dao.UserManagementService;
 import hkmu.comps380f.exception.BookNotFound;
-import hkmu.comps380f.model.Book;
-import hkmu.comps380f.model.TicketUser;
+import hkmu.comps380f.exception.CommentNotFound;
+import hkmu.comps380f.model.Comment;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import org.eclipse.tags.shaded.org.apache.xpath.operations.Mod;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.io.IOException;
-import java.security.Principal;
+import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/user")
 public class UserManagementController {
     @Resource
     UserManagementService umService;
+
+    @Resource
+    CommentService commentService;
+
+    @Resource
+    BookService bookService;
 
     @GetMapping({"", "/", "/list"})
     public String list(ModelMap model) {
@@ -117,5 +119,20 @@ public class UserManagementController {
         return "redirect:/user/list";
     }
 
+    @GetMapping("/comment/{username}")
+    public String view(@PathVariable("username") String username, ModelMap model) {
+        List<Comment> comments = commentService.getCommentsByUser(username);
+        model.addAttribute("comments", comments);
+        return "comment/list";
+    }
 
+    @GetMapping(value = "/deleteComment/{commentId}")
+    public String deleteComment(@PathVariable("commentId") UUID commentId)
+            throws BookNotFound, CommentNotFound {
+        Comment comment = commentService.getCommentById(commentId);
+        String username = comment.getUser().getUsername();
+        long bookId = comment.getBook().getId();
+        bookService.deleteComment(bookId, commentId);
+        return "redirect:/user/comment/" + username;
+    }
 }

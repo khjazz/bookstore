@@ -26,7 +26,7 @@ public class DownloadingView implements View {
     @Override
     public void render(Map<String, ?> model, HttpServletRequest request,
                        HttpServletResponse response) throws Exception {
-        response.setHeader("Content-Disposition", "attachment; filename=" + this.filename);
+        response.setHeader("Content-Disposition", "inline; filename=" + this.filename);
         response.setContentType("application/octet-stream");
 
         ServletOutputStream stream = response.getOutputStream();

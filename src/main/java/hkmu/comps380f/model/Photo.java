@@ -20,11 +20,7 @@ public class Photo {
     @Lob
     private byte[] contents;
 
-    @Column(name = "book_id", insertable=false, updatable=false)
-    private long bookId;
-
-    @OneToOne
-    @JoinColumn(name = "book_id")
+    @OneToOne(mappedBy = "photo")
     private Book book;
 
     public UUID getId() {
@@ -57,14 +53,6 @@ public class Photo {
 
     public void setContents(byte[] contents) {
         this.contents = contents;
-    }
-
-    public long getBookId() {
-        return bookId;
-    }
-
-    public void setBookId(long bookId) {
-        this.bookId = bookId;
     }
 
     public Book getBook() {

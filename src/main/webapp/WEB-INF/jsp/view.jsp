@@ -37,9 +37,12 @@ Price - <c:out value="${book.price}"></c:out><br/>
     <input type="submit" value="Submit"/>
 </form:form>
 <c:if test="${!empty book.comments}">
-    Comments:
+    Comments:<br/><br/>
     <c:forEach items="${book.comments}" var="comment" varStatus="status">
-        <div><c:out value="${comment.content}"/></div>
+        <div>
+            <c:out value="${comment.user.username}"/> says:<br/>
+            <c:out value="${comment.content}"/>
+        </div>
         [<a href="<c:url value="/book/${bookId}/delete/${comment.id}"/>">Delete</a>]
     </c:forEach><br/><br/>
 </c:if>

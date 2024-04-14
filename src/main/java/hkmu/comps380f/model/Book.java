@@ -20,8 +20,8 @@ public class Book {
     private String description;
     private boolean availability;
 
-    @OneToOne(mappedBy = "book", fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "photo_id")
     private Photo photo;
 
     @OneToMany(mappedBy = "book", fetch = FetchType.EAGER,
@@ -75,6 +75,13 @@ public class Book {
     }
 
     public void setPhoto(Photo photo) {
+        if (photo == null) {
+            if (this.photo != null) {
+                this.photo.setBook(null);
+            }
+        } else {
+            photo.setBook(this);
+        }
         this.photo = photo;
     }
 
@@ -96,6 +103,7 @@ public class Book {
 
     public void deleteComment(Comment comment) {
         comment.setBook(null);
+        comment.setUser(null);
         this.comments.remove(comment);
     }
 }

@@ -9,7 +9,6 @@ import hkmu.comps380f.model.Photo;
 import hkmu.comps380f.view.DownloadingView;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,7 +19,6 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
-import java.util.Map;
 import java.security.Principal;
 import java.util.Map;
 import java.util.UUID;
@@ -128,10 +126,10 @@ public class BookController {
 
     @PostMapping("/{bookId}/comment")
     public String addComment(@PathVariable("bookId") long bookId,
-                         commentForm form)
+                         commentForm form, Principal principal)
             throws BookNotFound {
         String content = form.getContent();
-        bookService.addComment(bookId, content);
+        bookService.addComment(principal.getName(), bookId, content);
         return "redirect:/book/view/" + bookId;
     }
 
