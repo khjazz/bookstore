@@ -38,7 +38,13 @@
                         </c:forEach>
                     </td>
                     <td>
+                        <security:authorize access="hasRole('ADMIN') or
+                                         principal.username=='${user.username}'">
+                            [<a href="<c:url value="/user/edituser/${user.username}"/>">Edit</a>]
+                        </security:authorize>
+                        <security:authorize access="hasRole('ADMIN')">
                         [<a href="<c:url value="/user/delete/${user.username}" />">Delete</a>]
+                        </security:authorize>
                     </td>
                 </tr>
             </c:forEach>

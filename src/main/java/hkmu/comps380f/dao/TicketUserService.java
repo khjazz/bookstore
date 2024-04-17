@@ -1,5 +1,6 @@
 package hkmu.comps380f.dao;
 
+import hkmu.comps380f.exception.UserNotFound;
 import hkmu.comps380f.model.TicketUser;
 import hkmu.comps380f.model.UserRole;
 import jakarta.annotation.Resource;
@@ -10,7 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +35,5 @@ public class TicketUserService implements UserDetailsService {
         return new User(ticketUser.getUsername(), ticketUser.getPassword(), authorities);
     }
 
-    
 }
 

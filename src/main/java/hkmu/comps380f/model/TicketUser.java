@@ -15,10 +15,13 @@ public class TicketUser {
     private String password;
     private String email;
     private String delivery;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER,
             cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserRole> roles = new ArrayList<>();
+
     public TicketUser() {}
+
     public TicketUser(String username, String password, String email, String delivery, String[] roles) {
         this.username = username;
         this.password = "{noop}" + password;

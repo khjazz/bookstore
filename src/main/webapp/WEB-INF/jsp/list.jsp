@@ -32,7 +32,6 @@
                 [<a href="<c:url value="/book/delete/${entry.id}"/>">Delete</a>]
             </security:authorize>
             <br/>
-            [<a href="<c:url value="/book/delete/${entry.id}" />">Delete</a>]
             [<a href="<c:url value='/book/shop?bookId=${entry.id}&action=addToCart' />">Add to Cart</a>]<br />
         </c:forEach>
     </c:otherwise>

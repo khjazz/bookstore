@@ -8,8 +8,10 @@ import hkmu.comps380f.model.Book;
 import hkmu.comps380f.model.Photo;
 import hkmu.comps380f.view.DownloadingView;
 import jakarta.annotation.Resource;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -45,6 +47,7 @@ public class BookController {
     }
 
     public static class BookForm {
+        private String name;
         private String author;
         private String description;
         private double price;
@@ -52,6 +55,15 @@ public class BookController {
         private MultipartFile photo;
 
         // Getters and Setters of name, author, description, price, availability, and photo
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
         public String getAuthor() {
             return author;
         }
@@ -172,6 +184,7 @@ public class BookController {
         ModelAndView modelAndView = new ModelAndView("edit");
         modelAndView.addObject("book", book);
         BookForm form = new BookForm();
+        form.setName((book.getName()));
         form.setAuthor(book.getAuthor());
         form.setAvailability(book.isAvailability());
         form.setDescription(book.getDescription());
@@ -179,6 +192,7 @@ public class BookController {
         modelAndView.addObject("bookForm", form);
         return modelAndView;
     }
+
     @PostMapping("/edit/{bookId}")
     public String edit(@PathVariable("bookId") long bookId, BookForm form,
                        Principal principal, HttpServletRequest request)
@@ -189,11 +203,12 @@ public class BookController {
                 && !principal.getName().equals(book.getAuthor()))) {
             return "redirect:/book/list";
         }
-        bookService.updateBook(bookId, form.getAuthor(),
+        bookService.updateBook(bookId, form.getName(),form.getAuthor(),
                 form.getDescription(), form.getPrice(),
                 form.isAvailability(), form.getPhoto());
         return "redirect:/book/view/" + bookId;
     }
+
     private void addToCart(HttpServletRequest request, long bookId)
             throws IOException {
         HttpSession session = request.getSession();
@@ -206,6 +221,19 @@ public class BookController {
             cart.put(bookId, 0);
         cart.put(bookId, cart.get(bookId) + 1);
     }
+
+    @GetMapping("/shop/viewCart")
+    private void viewCart(HttpServletRequest request)
+            throws IOException {
+        request.setAttribute("cart", new ConcurrentHashMap<>());
+    }
+
+    @GetMapping("/shop/")
+    private void browse(HttpServletRequest request)
+            throws IOException {
+        request.setAttribute("cart", new ConcurrentHashMap<>());
+    }
+
     @GetMapping("/shop")
     public String doShop(HttpServletRequest request,
                          @RequestParam long bookId,
