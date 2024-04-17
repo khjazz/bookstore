@@ -63,8 +63,12 @@ public class UserManagementService {
     @PostConstruct
     public void init() {
         if (tuRepo.count() == 0){
-            TicketUser user = new TicketUser("keith", "keithpw", "abc.com", "abc", new String[]{"ROLE_ADMIN", "ROLE_USER"});
-            tuRepo.save(user);
+            TicketUser user1 = new TicketUser("keith", "keithpw", "abc.com", "abc", new String[]{"ROLE_ADMIN", "ROLE_USER"});
+            TicketUser user2 = new TicketUser("john", "johnpw", "bbb@abc.com", "bbb", new String[]{"ROLE_ADMIN"});
+            TicketUser user3 = new TicketUser("mary", "marypw", "ccc@abc.com", "ccc", new String[]{ "ROLE_USER"});
+            tuRepo.save(user1);
+            tuRepo.save(user2);
+            tuRepo.save(user3);
         }
     }
 
