@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class BookService {
+public class    BookService {
     @Resource
     private BookRepository bookRepo;
 
@@ -127,13 +127,14 @@ public class BookService {
     }
 
     @Transactional(rollbackFor = BookNotFound.class)
-    public void updateBook(long id, String author, String description,
+    public void updateBook(long id, String name, String author, String description,
                            double price, boolean availability, MultipartFile filePart)
             throws IOException, BookNotFound {
         Book updatedBook = bookRepo.findById(id).orElse(null);
         if (updatedBook == null) {
             throw new BookNotFound(id);
         }
+        updatedBook.setName(name);
         updatedBook.setAuthor(author);
         updatedBook.setDescription(description);
         updatedBook.setPrice(price);

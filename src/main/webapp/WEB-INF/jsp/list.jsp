@@ -9,6 +9,7 @@
     <input type="submit" value="Log out"/>
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
+<a href="<c:url value="/book/viewCart" />">Cart</a><br/>
 <h2>Books</h2>
 <security:authorize access="hasRole('ADMIN')">
     <a href="<c:url value="/user" />">Manage User Accounts</a><br/><br/>
@@ -32,7 +33,6 @@
                 [<a href="<c:url value="/book/delete/${entry.id}"/>">Delete</a>]
             </security:authorize>
             <br/>
-            [<a href="<c:url value="/book/delete/${entry.id}" />">Delete</a>]
             [<a href="<c:url value='/book/shop?bookId=${entry.id}&action=addToCart' />">Add to Cart</a>]<br />
         </c:forEach>
     </c:otherwise>

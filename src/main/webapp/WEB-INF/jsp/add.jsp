@@ -11,6 +11,8 @@
 </form>
 <h2>Add a book</h2>
 <form:form method="POST" enctype="multipart/form-data" modelAttribute="bookForm">
+    <form:label path="name">Name</form:label><br/>
+    <form:input type="text" path="name"/><br/><br/>
     <form:label path="author">Author</form:label><br/>
     <form:input type="text" path="author"/><br/><br/>
     <form:label path="description">Description</form:label><br/>
