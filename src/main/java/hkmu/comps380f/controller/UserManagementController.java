@@ -163,10 +163,6 @@ public class UserManagementController {
         modelAndView.addObject("user", user);
         Form form = new Form();
         form.setUsername(user.getUsername());
-        form.setPassword(user.getPassword());
-        form.setEmail(user.getEmail());
-        form.setDelivery(user.getDelivery());
-//        form.setRoles(user.getRoles());
         modelAndView.addObject("form", form);
         return modelAndView;
     }

@@ -10,7 +10,7 @@
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
 <h2>Edit User #${user.username}</h2>
-<form:form method="POST" modelAttribute="Form">
+<form:form method="POST" modelAttribute="form">
     <form:label path="username">Username</form:label><br/>
     <form:input type="text" path="username"/><br/><br/>
     <form:label path="password">Password</form:label><br/>
