@@ -5,8 +5,11 @@ import hkmu.comps380f.dao.CommentService;
 import hkmu.comps380f.dao.UserManagementService;
 import hkmu.comps380f.exception.BookNotFound;
 import hkmu.comps380f.exception.CommentNotFound;
+import hkmu.comps380f.exception.UserNotFound;
 import hkmu.comps380f.model.Comment;
+import hkmu.comps380f.model.TicketUser;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -15,8 +18,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -96,6 +101,14 @@ public class UserManagementController {
         public void setRoles(String[] roles) {
             this.roles = roles;
         }
+
+        public String getConfirm_password() {
+            return confirm_password;
+        }
+
+        public void setConfirm_password(String confirm_password) {
+            this.confirm_password = confirm_password;
+        }
     }
 
     @GetMapping("/create")
@@ -135,4 +148,41 @@ public class UserManagementController {
         bookService.deleteComment(bookId, commentId);
         return "redirect:/user/comment/" + username;
     }
+
+    @GetMapping("/edituser/{username}")
+    public ModelAndView showEditUser(@PathVariable("username") String username,
+                                     Principal principal, HttpServletRequest request)
+            throws UserNotFound {
+        TicketUser user = umService.getTicketUsers(username);
+        if (user == null
+                || (!request.isUserInRole("ROLE_ADMIN")
+                && !principal.getName().equals(user.getUsername()))) {
+            return new ModelAndView(new RedirectView("/user/", true));
+        }
+        ModelAndView modelAndView = new ModelAndView("edituser");
+        modelAndView.addObject("user", user);
+        Form form = new Form();
+        form.setUsername(user.getUsername());
+        form.setPassword(user.getPassword());
+        form.setEmail(user.getEmail());
+        form.setDelivery(user.getDelivery());
+//        form.setRoles(user.getRoles());
+        modelAndView.addObject("form", form);
+        return modelAndView;
+    }
+
+    @PostMapping("/edituser/{username}")
+    public String editUser(@PathVariable("username")String username, UserManagementController.Form form,
+                           Principal principal, HttpServletRequest request)
+            throws UserNotFound {
+        TicketUser user = umService.getTicketUsers(username);
+        if (user == null
+                || (!request.isUserInRole("ROLE_ADMIN")
+                && !principal.getName().equals(user.getUsername()))) {
+            return "redirect:/user/";
+        }
+        umService.updateUser(form.getUsername(), form.getPassword(), form.getEmail(), form.getDelivery());
+        return "redirect:/user/" + username;
+    }
+
 }
