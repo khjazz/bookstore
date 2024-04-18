@@ -22,11 +22,23 @@ public class SecurityConfig {
             throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/user/create").hasRole("ADMIN")
                         .requestMatchers("/user").hasRole("ADMIN")
                         .requestMatchers("/user/").hasRole("ADMIN")
+                        .requestMatchers("/user/delete/**").hasRole("ADMIN")
+                        .requestMatchers("/user/deleteComment/**").hasRole("ADMIN")
+                        .requestMatchers("/user/edituser/**").hasRole("ADMIN")
                         .requestMatchers("/user/list").hasRole("ADMIN")
+                        .requestMatchers("/user/selfEdit").hasRole("USER")
+                        .requestMatchers("/book/create/**").hasRole("ADMIN")
+                        .requestMatchers("/book/edit/**").hasRole("ADMIN")
                         .requestMatchers("/book/delete/**").hasRole("ADMIN")
-                        .requestMatchers("/book/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/book/checkout").hasRole("USER")
+                        .requestMatchers("/book/order").hasRole("USER")
+                        .requestMatchers("/book/shop").hasRole("USER")
+                        .requestMatchers("/book/viewCart").hasRole("USER")
+                        .requestMatchers("/book/*/comment").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/book/*/delete/**").hasRole("ADMIN")
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form

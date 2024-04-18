@@ -58,7 +58,7 @@ public class UserManagementController {
         @NotEmpty(message="Please enter your delivery.")
         private String delivery;
 
-        @NotEmpty(message="Please select at least one role.")
+//        @NotEmpty(message="Please select at least one role.")
         private String[] roles;
         // getters and setters for all properties
 
@@ -126,6 +126,22 @@ public class UserManagementController {
         return "redirect:/login";
     }
 
+    @GetMapping("/register")
+    public ModelAndView register() {
+        return new ModelAndView("register", "ticketUser", new Form());
+    }
+
+    @PostMapping("/register")
+    public String register(@ModelAttribute("ticketUser") @Valid Form form, BindingResult result) throws IOException {
+        if (result.hasErrors()) {
+            return "register";
+        }
+        String[] roles = new String[]{ "ROLE_USER"};
+        umService.createTicketUser(form.getUsername(),
+                form.getPassword(), form.getEmail(), form.getDelivery(), roles);
+        return "redirect:/login";
+    }
+
     @GetMapping("/delete/{username}")
     public String deleteTicket(@PathVariable("username") String username) {
         umService.delete(username);
@@ -180,4 +196,24 @@ public class UserManagementController {
         return "redirect:/user/";
     }
 
+    @GetMapping("/selfEdit")
+    public ModelAndView showEditUser(Principal principal, HttpServletRequest request)
+            throws UserNotFound {
+        TicketUser user = umService.getTicketUsers(principal.getName());
+
+        ModelAndView modelAndView = new ModelAndView("selfEdit");
+        modelAndView.addObject("user", user);
+        Form form = new Form();
+        modelAndView.addObject("form", form);
+        return modelAndView;
+    }
+
+    @PostMapping("/selfEdit")
+    public String editUser(UserManagementController.Form form,
+                           Principal principal, HttpServletRequest request)
+            throws UserNotFound {
+
+        umService.editUser(principal.getName(), "{noop}"+form.getPassword(), form.getEmail(), form.getDelivery());
+        return "redirect:/book";
+    }
 }

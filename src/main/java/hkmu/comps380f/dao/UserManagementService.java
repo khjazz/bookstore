@@ -70,6 +70,22 @@ public class UserManagementService {
         tuRepo.save(user);
     }
 
+    @Transactional(rollbackFor = UserNotFound.class)
+    public void editUser(String username, String password, String email, String delivery)
+            throws UsernameNotFoundException {
+        TicketUser user = tuRepo.findById(username).orElse(null);
+        if (user == null) {
+            throw new UsernameNotFoundException(username);
+        }
+
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setEmail(email);
+        user.setDelivery(delivery);
+
+        tuRepo.save(user);
+    }
+
     @Transactional
     @PostConstruct
     public void init() {

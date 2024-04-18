@@ -1,6 +1,7 @@
 package hkmu.comps380f.controller;
 
 import hkmu.comps380f.dao.BookService;
+import hkmu.comps380f.dao.OrderService;
 import hkmu.comps380f.exception.BookNotFound;
 import hkmu.comps380f.exception.CommentNotFound;
 import hkmu.comps380f.exception.PhotoNotFound;
@@ -11,6 +12,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +32,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class BookController {
     @Resource
     private BookService bookService;
+
+    @Resource
+    private OrderService orderService;
 
     // Controller methods, Form-backing object, ...
     @GetMapping(value = {"", "/list"})
@@ -118,8 +123,8 @@ public class BookController {
 
 
     @PostMapping("/create")
-    public View create(BookForm form, Principal principal) throws IOException {
-        long ticketId = bookService.createBook(principal.getName(), form.getAuthor(),
+    public View create(BookForm form) throws IOException {
+        long ticketId = bookService.createBook(form.getName(), form.getAuthor(),
                 form.getDescription(), form.getPrice(),
                 form.isAvailability(), form.getPhoto());
         return new RedirectView("/book/view/" + ticketId, true);
@@ -206,7 +211,8 @@ public class BookController {
         return "redirect:/book/view/" + bookId;
     }
 
-    private void addToCart(HttpServletRequest request, long bookId)
+
+    private void addToCart(HttpServletRequest request, long bookId, Integer quantity)
             throws IOException {
         HttpSession session = request.getSession();
         if (session.getAttribute("cart") == null)
@@ -216,7 +222,25 @@ public class BookController {
                 = (Map<Long, Integer>) session.getAttribute("cart");
         if (!cart.containsKey(bookId))
             cart.put(bookId, 0);
-        cart.put(bookId, cart.get(bookId) + 1);
+        cart.put(bookId, cart.get(bookId) + quantity);
+
+    }
+
+    private void removeCart(HttpServletRequest request, long bookId, Integer quantity)
+            throws IOException {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("cart") == null)
+            session.setAttribute("cart", new ConcurrentHashMap<>());
+        @SuppressWarnings("unchecked")
+        Map<Long, Integer> cart
+                = (Map<Long, Integer>) session.getAttribute("cart");
+        if (!cart.containsKey(bookId))
+            cart.put(bookId, 0);
+        Integer quantity1  = cart.get(bookId);
+        if (quantity1 - quantity > 0)
+            cart.put(bookId, cart.get(bookId) - quantity);
+        else
+            cart.remove(bookId);
     }
 
     private String viewCart(HttpServletRequest request)
@@ -244,19 +268,57 @@ public class BookController {
         return this.viewCart(request);
     }
 
+    @GetMapping("/order")
+    private String order(HttpServletRequest request, Principal principal, ModelMap model)
+            throws BookNotFound {
+        model.addAttribute("orders", orderService.getOrder(principal.getName()));
+
+
+        return "orderList";
+    }
+
 
     @GetMapping("/shop")
     public String doShop(HttpServletRequest request,
                          @RequestParam long bookId,
-                         @RequestParam String action)
+                         @RequestParam String action,
+                         @RequestParam Integer quantity)
             throws IOException {
         if (action == null)
             action = "browse";
         if (action.equals("addToCart")) {
-            this.addToCart(request, bookId);
+            this.addToCart(request, bookId, quantity);
+        }
+        if (action.equals("removeCart")) {
+            this.removeCart(request, bookId, quantity);
+            return "redirect:/book/viewCart";
         }
         return "redirect:/book/list";
     }
+
+    @GetMapping("/checkout")
+    public String checkout(HttpServletRequest request ,ModelMap model , Principal principal) throws IOException ,BookNotFound {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("cart") == null)
+            session.setAttribute("cart", new ConcurrentHashMap<>());
+        @SuppressWarnings("unchecked")
+        Map<Long, Integer> cart
+                = (Map<Long, Integer>) session.getAttribute("cart");
+        Map<Long, Book> books = new HashMap<>();
+        String result = new String("");
+        for (Long bookId : cart.keySet()) {
+            Book book = bookService.getBook(bookId);
+            result += book.getName();
+            result += ": ";
+            result += cart.get(bookId).toString();
+            result += ". ";
+
+        }
+        model.addAttribute("result", result);
+        orderService.addOrder(principal.getName(), result);
+        return "checkout";
+    }
+
 
     @ExceptionHandler({BookNotFound.class, CommentNotFound.class})
     public ModelAndView error(Exception e) {

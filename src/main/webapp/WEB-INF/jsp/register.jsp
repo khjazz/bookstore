@@ -11,7 +11,7 @@
 </head>
 
 <body>
-<h2>Create a User</h2>
+<h2>Register</h2>
 <form:form method="POST" modelAttribute="ticketUser">
     <form:label path="username">Username</form:label><br/>
     <form:errors path="username" cssClass="error" />
@@ -28,13 +28,9 @@
     <form:label path="delivery">delivery</form:label><br/>
     <form:errors path="delivery" cssClass="error" />
     <form:input type="text" path="delivery"/><br/><br/>
-    <form:label path="roles">Roles</form:label><br/>
-    <form:errors path="roles" cssClass="error" />
-    <form:checkbox path="roles" value="ROLE_USER"/>ROLE_USER
-    <form:checkbox path="roles" value="ROLE_ADMIN"/>ROLE_ADMIN
     <br/><br/>
-    <input type="submit" value="Add User"/>
+    <input type="submit" value="register"/>
 </form:form>
-<a href="<c:url value="/book" />">Return to book list</a>
+<a href="<c:url value="/login" />">Return login</a>
 </body>
 </html>

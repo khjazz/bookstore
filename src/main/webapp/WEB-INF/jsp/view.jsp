@@ -18,7 +18,6 @@
     [<a href="<c:url value="/book/delete/${book.id}"/>">Delete</a>]
 </security:authorize>
 <br/><br/>
-[<a href="<c:url value='/book/shop?bookId=${book.id}&action=addToCart' />">Add to Cart</a>]<br />
 [<a href="<c:url value="/book/delete/${book.id}" />">Delete</a>]<br/><br/>
 Title - <c:out value="${book.name}"/><br/>
 Author - <c:out value="${book.author}"/><br/>

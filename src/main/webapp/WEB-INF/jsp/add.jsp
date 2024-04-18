@@ -28,5 +28,6 @@
     <input type="file" name="photo"/><br/><br/>
     <input type="submit" value="Submit"/>
 </form:form>
+<a href="<c:url value="/book" />">Return to book list</a>
 </body>
 </html>

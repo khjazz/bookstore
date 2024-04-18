@@ -4,11 +4,14 @@
     <title>Bookstore</title>
 </head>
 <body>
-<c:url var="logoutUrl" value="/logout"/>
-<form action="${logoutUrl}" method="post">
-    <input type="submit" value="Log out" />
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-</form>
+<security:authorize access="hasAnyRole('USER', 'ADMIN')">
+    <c:url var="logoutUrl" value="/logout"/>
+    <form action="${logoutUrl}" method="post">
+        <input type="submit" value="Log out"/>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </form>
+</security:authorize>
+<a href="<c:url value="/user/login" />">Login</a><br/>
 <h2>Error page</h2>
 <c:choose>
     <c:when test="${empty message}">
