@@ -162,7 +162,6 @@ public class UserManagementController {
         ModelAndView modelAndView = new ModelAndView("edituser");
         modelAndView.addObject("user", user);
         Form form = new Form();
-        form.setUsername(user.getUsername());
         modelAndView.addObject("form", form);
         return modelAndView;
     }
@@ -177,8 +176,8 @@ public class UserManagementController {
                 && !principal.getName().equals(user.getUsername()))) {
             return "redirect:/user/";
         }
-        umService.updateUser(form.getUsername(), form.getPassword(), form.getEmail(), form.getDelivery());
-        return "redirect:/user/" + username;
+            umService.updateUser(username, "{noop}"+form.getPassword(), form.getEmail(), form.getDelivery(), form.getRoles());
+        return "redirect:/user/";
     }
 
 }

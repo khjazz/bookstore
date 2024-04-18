@@ -2,6 +2,7 @@ package hkmu.comps380f.dao;
 
 import hkmu.comps380f.exception.UserNotFound;
 import hkmu.comps380f.model.TicketUser;
+import hkmu.comps380f.model.UserRole;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,6 +15,9 @@ import java.util.List;
 public class UserManagementService {
     @Resource
     private TicketUserRepository tuRepo;
+
+    @Resource
+    private UserRoleRepository urRepo;
     @Transactional
     public List<TicketUser> getTicketUsers() {
         return tuRepo.findAll();
@@ -44,7 +48,7 @@ public class UserManagementService {
     }
 
     @Transactional(rollbackFor = UserNotFound.class)
-    public void updateUser(String username, String password, String email, String delivery)
+    public void updateUser(String username, String password, String email, String delivery, String[] roles)
             throws UsernameNotFoundException {
         TicketUser user = tuRepo.findById(username).orElse(null);
         if (user == null) {
@@ -55,6 +59,13 @@ public class UserManagementService {
         user.setPassword(password);
         user.setEmail(email);
         user.setDelivery(delivery);
+        urRepo.deleteByUser(user);
+        for (String role : roles) {
+            UserRole userRole = new UserRole();
+            userRole.setRole(role);
+            userRole.setUser(user);
+            urRepo.save(userRole);
+        }
 
         tuRepo.save(user);
     }
