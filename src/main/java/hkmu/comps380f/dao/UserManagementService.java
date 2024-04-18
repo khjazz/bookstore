@@ -59,6 +59,9 @@ public class UserManagementService {
         user.setPassword(password);
         user.setEmail(email);
         user.setDelivery(delivery);
+
+        tuRepo.save(user);
+
         urRepo.deleteByUser(user);
         for (String role : roles) {
             UserRole userRole = new UserRole();
@@ -66,8 +69,6 @@ public class UserManagementService {
             userRole.setUser(user);
             urRepo.save(userRole);
         }
-
-        tuRepo.save(user);
     }
 
     @Transactional
