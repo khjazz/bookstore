@@ -123,7 +123,7 @@ public class UserManagementController {
         }
         umService.createTicketUser(form.getUsername(),
                 form.getPassword(), form.getEmail(), form.getDelivery(),form.getRoles());
-        return "redirect:/login";
+        return "redirect:/user";
     }
 
     @GetMapping("/register")
