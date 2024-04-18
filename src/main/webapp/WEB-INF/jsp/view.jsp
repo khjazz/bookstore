@@ -10,10 +10,10 @@
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
 <h2>Book:</h2>
-<security:authorize access="hasRole('ADMIN') or
-                                         principal.username=='${book.author}'">
-    [<a href="<c:url value="/book/edit/${book.id}"/>">Edit</a>]
-</security:authorize>
+<%--<security:authorize access="hasRole('ADMIN') or--%>
+<%--                                         principal.username=='${book.author}'">--%>
+<%--    [<a href="<c:url value="/book/edit/${book.id}"/>">Edit</a>]--%>
+<%--</security:authorize>--%>
 <security:authorize access="hasRole('ADMIN')">
     [<a href="<c:url value="/book/delete/${book.id}"/>">Delete</a>]
 </security:authorize>

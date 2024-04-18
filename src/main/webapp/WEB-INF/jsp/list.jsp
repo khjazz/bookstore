@@ -12,13 +12,15 @@
 </form>
     <a href="<c:url value="/user/selfEdit" />">EditUser</a><br/>
 </security:authorize>
+<security:authorize access="isAnonymous()">
 <a href="<c:url value="/login" />">Login</a><br/>
+</security:authorize>
 <a href="<c:url value="/book/viewCart" />">Cart</a><br/>
 <h2>Books</h2>
 <security:authorize access="hasRole('ADMIN')">
     <a href="<c:url value="/user" />">Manage User Accounts</a><br/><br/>
-</security:authorize>
 <a href="<c:url value="/book/create" />">Add a Book</a><br/><br/>
+</security:authorize>
 <c:choose>
     <c:when test="${fn:length(books) == 0}">
         <i>There are no books in the system.</i>
@@ -46,6 +48,8 @@
         </c:forEach>
     </c:otherwise>
 </c:choose>
+<security:authorize access="hasRole('ADMIN')">
 <a href="<c:url value="/book/order" />">View Order</a><br/><br/>
+</security:authorize>
 </body>
 </html>

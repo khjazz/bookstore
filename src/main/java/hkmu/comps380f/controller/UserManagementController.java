@@ -145,6 +145,7 @@ public class UserManagementController {
     @GetMapping("/delete/{username}")
     public String deleteTicket(@PathVariable("username") String username) {
         umService.delete(username);
+
         return "redirect:/user/list";
     }
 

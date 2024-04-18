@@ -1,10 +1,13 @@
 package hkmu.comps380f.dao;
 
 import hkmu.comps380f.exception.UserNotFound;
+import hkmu.comps380f.model.Comment;
 import hkmu.comps380f.model.TicketUser;
 import hkmu.comps380f.model.UserRole;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
+import jakarta.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,8 +16,14 @@ import java.util.List;
 
 @Service
 public class UserManagementService {
+    @Autowired
+    EntityManager em;
+
     @Resource
     private TicketUserRepository tuRepo;
+
+    @Resource
+    private CommentRepository cRepo;
 
     @Resource
     private UserRoleRepository urRepo;
@@ -39,6 +48,9 @@ public class UserManagementService {
         if (ticketUser == null) {
             throw new UsernameNotFoundException("User '" + username + "' not found.");
         }
+        List <Comment> comments = cRepo.findByUser(ticketUser);
+        ticketUser.getComments().clear();
+        em.flush();
         tuRepo.delete(ticketUser);
     }
     @Transactional
@@ -59,9 +71,7 @@ public class UserManagementService {
         user.setPassword(password);
         user.setEmail(email);
         user.setDelivery(delivery);
-
-        tuRepo.save(user);
-
+        user.getRoles().clear();
         urRepo.deleteByUser(user);
         for (String role : roles) {
             UserRole userRole = new UserRole();
@@ -69,6 +79,8 @@ public class UserManagementService {
             userRole.setUser(user);
             urRepo.save(userRole);
         }
+        tuRepo.save(user);
+
     }
 
     @Transactional(rollbackFor = UserNotFound.class)
