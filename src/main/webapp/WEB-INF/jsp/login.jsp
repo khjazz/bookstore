@@ -4,6 +4,7 @@
     <title>BookService Login</title>
 </head>
 <body>
+<a href="<c:url value="/book" />">Return to books</a>
 <c:if test="${param.error != null}">
     <p>Login failed.</p>
 </c:if>

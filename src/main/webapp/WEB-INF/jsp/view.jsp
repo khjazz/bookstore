@@ -16,9 +16,8 @@
 <%--</security:authorize>--%>
 <security:authorize access="hasRole('ADMIN')">
     [<a href="<c:url value="/book/delete/${book.id}"/>">Delete</a>]
+    <br/><br/>
 </security:authorize>
-<br/><br/>
-[<a href="<c:url value="/book/delete/${book.id}" />">Delete</a>]<br/><br/>
 Title - <c:out value="${book.name}"/><br/>
 Author - <c:out value="${book.author}"/><br/>
 Description - <c:out value="${book.description}"></c:out><br/>

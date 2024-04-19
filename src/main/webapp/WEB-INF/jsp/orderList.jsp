@@ -12,7 +12,6 @@
         Your Order is empty
     </c:when>
     <c:otherwise>
-        <ul>
             <table>
                 <tr>
                     <th>OrderID</th>
@@ -20,11 +19,11 @@
                 </tr>
             <c:forEach var="order" items="${orders}">
             <tr>
-                <td>${order.id}<td/>
-                <td>${order.detail}<td/>
+                <td>${order.id}</td>
+                <td>${order.detail}</td>
             </tr>
             </c:forEach>
-        </ul>
+            </table>
     </c:otherwise>
 </c:choose>
 <a href="<c:url value="/book" />">Return to books</a>

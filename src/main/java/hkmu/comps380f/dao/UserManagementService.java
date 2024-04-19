@@ -1,13 +1,9 @@
 package hkmu.comps380f.dao;
 
 import hkmu.comps380f.exception.UserNotFound;
-import hkmu.comps380f.model.Comment;
-import hkmu.comps380f.model.TicketUser;
-import hkmu.comps380f.model.UserRole;
+import hkmu.comps380f.model.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
-import jakarta.persistence.EntityManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,9 +12,8 @@ import java.util.List;
 
 @Service
 public class UserManagementService {
-    @Autowired
-    EntityManager em;
-
+    @Resource
+    private BookRepository bRepo;
     @Resource
     private TicketUserRepository tuRepo;
 
@@ -48,10 +43,14 @@ public class UserManagementService {
         if (ticketUser == null) {
             throw new UsernameNotFoundException("User '" + username + "' not found.");
         }
-        List <Comment> comments = cRepo.findByUser(ticketUser);
-        ticketUser.getComments().clear();
-        em.flush();
-        tuRepo.delete(ticketUser);
+        List<Comment> comments = ticketUser.getComments();
+        for (Comment comment : comments) {
+            Book book = comment.getBook();
+            book.deleteComment(comment);
+            bRepo.save(book);
+            cRepo.delete(comment);
+        }
+        tuRepo.deleteById(username);
     }
     @Transactional
     public void createTicketUser(String username, String password, String email, String delivery, String[] roles) {

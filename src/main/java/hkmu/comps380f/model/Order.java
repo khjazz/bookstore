@@ -1,9 +1,6 @@
 package hkmu.comps380f.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
-
-import java.util.UUID;
 
 @Entity
 @Table(name = "\"order\"")
