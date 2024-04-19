@@ -143,7 +143,7 @@ public class UserManagementController {
     }
 
     @GetMapping("/delete/{username}")
-    public String deleteTicket(@PathVariable("username") String username) {
+    public String deleteUser(@PathVariable("username") String username) {
         umService.delete(username);
 
         return "redirect:/user/list";
@@ -179,6 +179,8 @@ public class UserManagementController {
         ModelAndView modelAndView = new ModelAndView("edituser");
         modelAndView.addObject("user", user);
         Form form = new Form();
+        form.setEmail(user.getEmail());
+        form.setDelivery(user.getDelivery());
         modelAndView.addObject("form", form);
         return modelAndView;
     }
@@ -198,22 +200,22 @@ public class UserManagementController {
     }
 
     @GetMapping("/selfEdit")
-    public ModelAndView showEditUser(Principal principal, HttpServletRequest request)
+    public ModelAndView showEditUser(Principal principal)
             throws UserNotFound {
         TicketUser user = umService.getTicketUsers(principal.getName());
 
         ModelAndView modelAndView = new ModelAndView("selfEdit");
         modelAndView.addObject("user", user);
         Form form = new Form();
+//        form.setPassword(user.getPassword());
+        form.setEmail(user.getEmail());
+        form.setDelivery(user.getDelivery());
         modelAndView.addObject("form", form);
         return modelAndView;
     }
 
     @PostMapping("/selfEdit")
-    public String editUser(UserManagementController.Form form,
-                           Principal principal, HttpServletRequest request)
-            throws UserNotFound {
-
+    public String editUser(UserManagementController.Form form, Principal principal) {
         umService.editUser(principal.getName(), "{noop}"+form.getPassword(), form.getEmail(), form.getDelivery());
         return "redirect:/book";
     }

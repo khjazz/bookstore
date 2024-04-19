@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Customer Support</title>
+    <title>Bookstore</title>
 </head>
 <body>
 <c:url var="logoutUrl" value="/logout"/>
@@ -9,7 +9,7 @@
     <input type="submit" value="Log out"/>
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
-<h2>Edit Ticket #${ticket.id}</h2>
+<h2>Edit Book #${book.id}</h2>
 <form:form method="POST" enctype="multipart/form-data" modelAttribute="bookForm">
     <form:label path="name">Name</form:label><br/>
     <form:input type="text" path="name"/><br/><br/>
@@ -28,6 +28,6 @@
     <input type="file" name="photo"/><br/><br/>
     <input type="submit" value="Submit"/>
 </form:form>
-<a href="<c:url value="/ticket" />">Return to list tickets</a>
+<a href="<c:url value="/book/view/${book.id}" />">Return to book</a>
 </body>
 </html>

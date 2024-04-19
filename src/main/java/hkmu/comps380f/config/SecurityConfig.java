@@ -5,12 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-
-import java.util.Locale;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -29,16 +23,17 @@ public class SecurityConfig {
                         .requestMatchers("/user/deleteComment/**").hasRole("ADMIN")
                         .requestMatchers("/user/edituser/**").hasRole("ADMIN")
                         .requestMatchers("/user/list").hasRole("ADMIN")
-                        .requestMatchers("/user/selfEdit").hasRole("USER")
                         .requestMatchers("/book/create/**").hasRole("ADMIN")
                         .requestMatchers("/book/edit/**").hasRole("ADMIN")
                         .requestMatchers("/book/delete/**").hasRole("ADMIN")
-                        .requestMatchers("/book/checkout").hasRole("USER")
-                        .requestMatchers("/book/order").hasRole("USER")
-                        .requestMatchers("/book/shop").hasRole("USER")
-                        .requestMatchers("/book/viewCart").hasRole("USER")
-                        .requestMatchers("/book/*/comment").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/book/*/delete/**").hasRole("ADMIN")
+
+                        .requestMatchers("/user/selfEdit").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/book/checkout").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/book/order").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/book/shop").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/book/viewCart").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/book/*/comment").hasAnyRole("USER", "ADMIN")
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form

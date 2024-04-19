@@ -27,7 +27,7 @@ public class Book {
     @OneToMany(mappedBy = "book", fetch = FetchType.EAGER,
             cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)
-    private List<Comment> comments   = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 
     // getters and setters of all properties
     public long getId() {

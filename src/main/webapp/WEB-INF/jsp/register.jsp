@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head><title>Customer Support</title>
+<head><title>Bookstore</title>
     <style>
         .error {
             color: red;

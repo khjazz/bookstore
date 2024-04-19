@@ -5,10 +5,8 @@
     <title>View Cart</title>
 </head>
 <body>
-<h1>View Cart</h1>
-<a href="<c:url value="/book/list" />">Product List</a><br/><br/>
-<p>Checkouted</p>
- ${result}
+<h1>Checked out</h1>
+${result}<br/>
 <a href="<c:url value="/book" />">Return to list books</a>
 </body>
 </html>

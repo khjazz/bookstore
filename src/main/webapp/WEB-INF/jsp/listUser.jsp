@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head><title>Customer Support User Management</title></head>
+<head><title>User Management</title></head>
 <body>
 <c:url var="logoutUrl" value="/logout"/>
 <form action="${logoutUrl}" method="post">

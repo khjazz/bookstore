@@ -6,10 +6,9 @@
 </head>
 <body>
 <h1>Order List</h1>
-<a href="<c:url value="/book/list" />">Order List</a><br/><br/>
 <c:choose>
     <c:when test="${empty orders}">
-        Your Order is empty
+        Your Order is empty<br/>
     </c:when>
     <c:otherwise>
             <table>

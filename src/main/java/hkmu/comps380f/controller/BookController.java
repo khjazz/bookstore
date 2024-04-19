@@ -12,7 +12,6 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -299,23 +298,25 @@ public class BookController {
     @GetMapping("/checkout")
     public String checkout(HttpServletRequest request ,ModelMap model , Principal principal) throws IOException ,BookNotFound {
         HttpSession session = request.getSession();
-        if (session.getAttribute("cart") == null)
-            session.setAttribute("cart", new ConcurrentHashMap<>());
-        @SuppressWarnings("unchecked")
         Map<Long, Integer> cart
                 = (Map<Long, Integer>) session.getAttribute("cart");
-        Map<Long, Book> books = new HashMap<>();
-        String result = new String("");
+        if (cart == null || cart.isEmpty())
+            return "redirect:/book";
+        @SuppressWarnings("unchecked")
+        StringBuilder result = new StringBuilder(new String(""));
         for (Long bookId : cart.keySet()) {
             Book book = bookService.getBook(bookId);
-            result += book.getName();
-            result += ": ";
-            result += cart.get(bookId).toString();
-            result += ". ";
-
+            result.append(book.getName());
+            result.append(": ");
+            result.append(cart.get(bookId).toString());
+            result.append("; ");
         }
-        model.addAttribute("result", result);
-        orderService.addOrder(principal.getName(), result);
+        if (result.length() > 0) {
+            result.setLength(result.length() - 2); // Remove the last "; "
+        }
+        model.addAttribute("result", result.toString());
+        orderService.addOrder(principal.getName(), result.toString());
+        session.setAttribute("cart", new ConcurrentHashMap<>());
         return "checkout";
     }
 
