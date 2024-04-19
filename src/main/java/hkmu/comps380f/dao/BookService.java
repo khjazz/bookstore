@@ -63,6 +63,13 @@ public class    BookService {
         if (deletedBook == null) {
             throw new BookNotFound(id);
         }
+        List<Comment> comments = deletedBook.getComments();
+        for (Comment comment : comments){
+            TicketUser user = comment.getUser();
+            user.getComments().remove(comment);
+            userRepo.save(user);
+        }
+
         bookRepo.delete(deletedBook);
     }
 

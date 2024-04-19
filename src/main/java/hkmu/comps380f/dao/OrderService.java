@@ -22,15 +22,12 @@ public class OrderService {
         order.setUser(user);
         order.setDetail(result);
         oRepo.save(order);
-
-
     }
 
     @Transactional
     public List<Order> getOrder(String username){
         TicketUser user = tuRepo.findById(username).orElse(null);
-        List<Order> orders = oRepo.findByUser(user);
 
-        return orders;
+        return oRepo.findByUser(user);
     }
 }

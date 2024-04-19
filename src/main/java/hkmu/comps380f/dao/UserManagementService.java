@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class UserManagementService {
     @Resource
-    private BookRepository bRepo;
+    private BookRepository bookRepo;
     @Resource
     private TicketUserRepository tuRepo;
 
@@ -46,9 +46,8 @@ public class UserManagementService {
         List<Comment> comments = ticketUser.getComments();
         for (Comment comment : comments) {
             Book book = comment.getBook();
-            book.deleteComment(comment);
-            bRepo.save(book);
-            cRepo.delete(comment);
+            book.getComments().remove(comment);
+            bookRepo.save(book);
         }
         tuRepo.deleteById(username);
     }
